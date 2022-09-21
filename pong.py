@@ -55,6 +55,13 @@ def playerMovement():
             player.y -= playerSpeed
     return
 
+def opponentMovement():
+    global playerSpeed
+    if ball.y > opponent.y:
+        opponent.y += playerSpeed - 4
+    if ball.y < opponent.y:
+        opponent.y -= playerSpeed - 4
+
 
 # Game loop
 while True:
@@ -73,6 +80,7 @@ while True:
 
     ballMovement()
     playerMovement()
+    opponentMovement()
 
     # updating the window
     pygame.display.flip()
