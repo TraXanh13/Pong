@@ -1,4 +1,5 @@
-import pygame, sys
+import pygame
+import sys
 
 # General setup
 pygame.init()
@@ -24,6 +25,7 @@ ball = pygame.Rect(screenWidth/2-15, screenHeight/2-15, 30, 30)
 player = pygame.Rect(screenWidth-20, screenHeight/2-70, 10, 140)
 opponent = pygame.Rect(10, screenHeight/2-70, 10, 140)
 
+
 def ballMovement():
     global ballSpeedX, ballSpeedY
     pygame.draw.ellipse(screen, lightGrey, ball)
@@ -31,20 +33,28 @@ def ballMovement():
     ball.y += ballSpeedY
 
     # Bounce off top and bottom
-    if(ball.top <= 0 or ball.bottom >= screenHeight):
+    if (ball.top <= 0 or ball.bottom >= screenHeight):
         ballSpeedY *= -1
 
     # Bounce off left and right
-    if(ball.left <= 0 or ball.right >= screenWidth):
+    if (ball.left <= 0 or ball.right >= screenWidth):
         ball.x = screenWidth/2-15
         ball.y = screenHeight/2-15
 
     # Bounce off player
-    if(ball.colliderect(player) or ball.colliderect(opponent)):
+    if (ball.colliderect(player) or ball.colliderect(opponent)):
         ballSpeedX *= -1
 
+
 def playerMovement():
+    global playerSpeed
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_DOWN:
+            player.y += playerSpeed
+        if event.key == pygame.K_UP:
+            player.y -= playerSpeed
     return
+
 
 # Game loop
 while True:
@@ -56,12 +66,14 @@ while True:
 
     # Draw objects
     screen.fill(bgColor)
-    pygame.draw.aaline(screen, lightGrey, (screenWidth/2, 0), (screenWidth/2, screenHeight))
+    pygame.draw.aaline(screen, lightGrey, (screenWidth/2, 0),
+                       (screenWidth/2, screenHeight))
     pygame.draw.rect(screen, lightGrey, player)
     pygame.draw.rect(screen, lightGrey, opponent)
 
     ballMovement()
+    playerMovement()
 
-    #updating the window
+    # updating the window
     pygame.display.flip()
     clock.tick(60)
