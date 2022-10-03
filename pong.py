@@ -10,6 +10,7 @@ pygame.mixer.pre_init(44100, -16, 2, 512)
 ballSpeedX = 7
 ballSpeedY = 7
 playerSpeed = 10
+opponentSpeed = 6
 playerScore = 0
 opponentScore = 0
 
@@ -90,16 +91,16 @@ def playerMovement():
 def opponentMovement():
     global playerSpeed
     if ball.y > opponent.y:
-        opponent.y += playerSpeed - 4
+        opponent.y += opponentSpeed
         if(opponent.bottom >= screenHeight):
             opponent.bottom = screenHeight
     if ball.y < opponent.y:
-        opponent.y -= playerSpeed - 4
+        opponent.y -= opponentSpeed
         if(opponent.top <= 0):
             opponent.top = 0
 
 if __name__ == "__main__":
-    
+
     # Game loop
     while True:
         # Handle input
