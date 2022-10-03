@@ -1,26 +1,21 @@
 import pygame, sys, random
+import Components.score as score
+import Components.sounds as sounds
 
 # General setup
 pygame.init()
 clock = pygame.time.Clock()
 pygame.font.init()
-pygame.mixer.pre_init(44100, -16, 2, 512)
 
 # Global variables
 ballSpeedX = 7
 ballSpeedY = 7
 playerSpeed = 10
 opponentSpeed = 6
-playerScore = 0
-opponentScore = 0
 
 # colors
 bgColor = pygame.Color('grey12')
 lightGrey = (200, 200, 200)
-
-# Sound variables (Supports wav and ogg files)
-pongSound = pygame.mixer.Sound('./media/pong.ogg')
-scoreSound = pygame.mixer.Sound('./media/score.ogg')
 
 # Setting up main window
 screenWidth = 1200
@@ -28,17 +23,10 @@ screenHeight = 700
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption('Pong')
 
-# Scores
-font = pygame.font.SysFont("arial", 64)
-playerScoreText = font.render(str(playerScore), False, lightGrey)
-opponentScoreText = font.render(str(opponentScore), False, lightGrey)
-
 # Game Rectangles
 ball = pygame.Rect(screenWidth/2-15, screenHeight/2-15, 30, 30)
 player = pygame.Rect(screenWidth-20, screenHeight/2-70, 10, 140)
 opponent = pygame.Rect(10, screenHeight/2-70, 10, 140)
-playerScoreRect = playerScoreText.get_rect(center=(700, 350))
-opponentScoreRect = opponentScoreText.get_rect(center=(500, 350))
 
 
 def ballMovement():
@@ -53,17 +41,18 @@ def ballMovement():
 
     # Bounce off left and right
     if (ball.left <= 0):
-        pygame.mixer.Sound.play(scoreSound)
+        sounds.play_score_sound()
         ballRestart()
-        playerScore += 1
+        score.increase_player_score()
 
     if (ball.right >= screenWidth):
+        sounds.play_score_sound()
         ballRestart()
-        opponentScore += 1
+        score.increase_opponent_score()
 
     # Bounce off player
     if (ball.colliderect(player) or ball.colliderect(opponent)):
-        pygame.mixer.Sound.play(pongSound)
+        sounds.play_pong_sound()
         ballSpeedX *= -1
 
 def ballRestart():
@@ -109,9 +98,6 @@ if __name__ == "__main__":
                 pygame.quit()
                 sys.exit()
 
-        # Update scores
-        playerScoreText = font.render(str(playerScore), False, lightGrey)
-        opponentScoreText = font.render(str(opponentScore), False, lightGrey)
 
         # Draw objects
         screen.fill(bgColor)
@@ -119,8 +105,9 @@ if __name__ == "__main__":
                         (screenWidth/2, screenHeight))
         pygame.draw.rect(screen, lightGrey, player)
         pygame.draw.rect(screen, lightGrey, opponent)
-        screen.blit(playerScoreText, playerScoreRect)
-        screen.blit(opponentScoreText, opponentScoreRect)
+
+        # Update scores
+        score.draw_scores(screen, screenWidth, screenHeight)
 
         # Move objects
         ballMovement()
