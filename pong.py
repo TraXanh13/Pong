@@ -1,5 +1,4 @@
-import pygame
-import sys
+import pygame, sys, random
 
 # General setup
 pygame.init()
@@ -48,19 +47,23 @@ def ballMovement():
 
     # Bounce off left and right
     if (ball.left <= 0):
-        ball.x = screenWidth/2-15
-        ball.y = screenHeight/2-15
+        ballRestart()
         playerScore += 1
 
     if (ball.right >= screenWidth):
-        ball.x = screenWidth/2-15
-        ball.y = screenHeight/2-15
+        ballRestart()
         opponentScore += 1
 
     # Bounce off player
     if (ball.colliderect(player) or ball.colliderect(opponent)):
         ballSpeedX *= -1
 
+def ballRestart():
+    global ballSpeedX, ballSpeedY
+    ball.x = screenWidth/2-15
+    ball.y = screenHeight/2-15
+    ballSpeedX *= random.choice((1, -1))
+    ballSpeedY *= random.choice((1, -1))
 
 def playerMovement():
     global playerSpeed
@@ -73,8 +76,6 @@ def playerMovement():
     return
 
 # Opponent follows the ball on the y axis
-
-
 def opponentMovement():
     global playerSpeed
     if ball.y > opponent.y:
