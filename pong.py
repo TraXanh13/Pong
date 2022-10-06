@@ -44,19 +44,38 @@ def ballMovement():
 
     # Bounce off left and right
     if (ball.left <= 0):
-        sounds.play_score_sound()
+        sounds.playScoreSound()
         ballRestart()
         score.increase_player_score()
 
     if (ball.right >= screenWidth):
-        sounds.play_score_sound()
+        sounds.playScoreSound()
         ballRestart()
         score.increase_opponent_score()
 
     # Bounce off player
-    if (ball.colliderect(player) or ball.colliderect(opponent)):
-        sounds.play_pong_sound()
+    if (ball.colliderect(player)):
+        sounds.playPongSound()
         ballSpeedX *= -1
+        if (ball.y > player.centery + 20):
+            ballSpeedY = abs(ballSpeedY)
+        elif (ball.y < player.centery - 20):
+            ballSpeedY = -abs(ballSpeedY)
+
+    # Bounce off opponent
+    if (ball.colliderect(opponent)):
+        sounds.playPongSound()
+        ballSpeedX *= -1
+        if (ball.y > opponent.centery + 20):
+            ballSpeedY = abs(ballSpeedY)
+        elif (ball.y < opponent.centery - 20):
+            ballSpeedY = -abs(ballSpeedY)
+
+    # Collision with item box
+    # TODO: Add modes for the item box
+    if ball.colliderect(box.getBox()):
+        sounds.playAlienSound()
+        box.removeBox()
 
 
 def ballRestart():
@@ -111,7 +130,7 @@ if __name__ == "__main__":
         pygame.draw.aaline(screen, lightGrey, (screenWidth/2, 0),
                            (screenWidth/2, screenHeight))
         pygame.draw.rect(screen, lightGrey,
-                         box.spawn_box(pygame.time.get_ticks()))
+                         box.spawnBox(pygame.time.get_ticks()))
         pygame.draw.rect(screen, lightGrey, player)
         pygame.draw.rect(screen, lightGrey, opponent)
 

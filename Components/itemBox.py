@@ -10,13 +10,19 @@ box_y = 0
 # Spawn an item box
 
 
-def spawn_box(clock):
+def spawnBox(clock):
     global box_x, box_y
     if (clock % 4000 <= 17):
-        box_x = random.randint(50, 1230)
-        box_y = random.randint(0, 770)
+        box_x = random.randint(50, 1150)
+        box_y = random.randint(0, 670)
     return pygame.Rect(box_x, box_y, box_height, box_width)
 
 
-def get_box():
+def getBox():
     return pygame.Rect(box_x, box_y, box_height, box_width)
+
+
+def removeBox():
+    global box_x, box_y
+    box_x = 1500
+    box_y = 0

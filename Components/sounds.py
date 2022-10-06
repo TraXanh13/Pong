@@ -6,9 +6,16 @@ pygame.mixer.pre_init(44100, -16, 2, 512)
 # Sound variables (Supports wav and ogg files)
 pongSound = pygame.mixer.Sound('./media/pong.ogg')
 scoreSound = pygame.mixer.Sound('./media/score.ogg')
+alienSound = pygame.mixer.Sound('./media/alien-8bit.wav')
 
-def play_pong_sound():
+
+def playPongSound():
     pygame.mixer.Sound.play(pongSound)
 
-def play_score_sound():
+
+def playScoreSound():
     pygame.mixer.Sound.play(scoreSound)
+
+
+def playAlienSound():
+    pygame.mixer.Sound.play(alienSound)
