@@ -1,6 +1,9 @@
-import pygame, sys, random
+import pygame
+import sys
+import random
 import Components.score as score
 import Components.sounds as sounds
+import Components.itemBox as box
 
 # General setup
 pygame.init()
@@ -55,6 +58,7 @@ def ballMovement():
         sounds.play_pong_sound()
         ballSpeedX *= -1
 
+
 def ballRestart():
     global ballSpeedX, ballSpeedY
     ball.x = screenWidth/2-15
@@ -62,31 +66,35 @@ def ballRestart():
     ballSpeedX *= random.choice((1, -1))
     ballSpeedY *= random.choice((1, -1))
 
+
 def playerMovement():
     global playerSpeed
     # Controlled with the up and down arrow keys
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_DOWN:
             player.y += playerSpeed
-            if(player.bottom >= screenHeight):
+            if (player.bottom >= screenHeight):
                 player.bottom = screenHeight
         if event.key == pygame.K_UP:
             player.y -= playerSpeed
-            if(player.top <= 0):
+            if (player.top <= 0):
                 player.top = 0
     return
 
 # Opponent follows the ball on the y axis
+
+
 def opponentMovement():
     global playerSpeed
     if ball.y > opponent.y:
         opponent.y += opponentSpeed
-        if(opponent.bottom >= screenHeight):
+        if (opponent.bottom >= screenHeight):
             opponent.bottom = screenHeight
     if ball.y < opponent.y:
         opponent.y -= opponentSpeed
-        if(opponent.top <= 0):
+        if (opponent.top <= 0):
             opponent.top = 0
+
 
 if __name__ == "__main__":
 
@@ -98,11 +106,12 @@ if __name__ == "__main__":
                 pygame.quit()
                 sys.exit()
 
-
         # Draw objects
         screen.fill(bgColor)
         pygame.draw.aaline(screen, lightGrey, (screenWidth/2, 0),
-                        (screenWidth/2, screenHeight))
+                           (screenWidth/2, screenHeight))
+        pygame.draw.rect(screen, lightGrey,
+                         box.spawn_box(pygame.time.get_ticks()))
         pygame.draw.rect(screen, lightGrey, player)
         pygame.draw.rect(screen, lightGrey, opponent)
 
