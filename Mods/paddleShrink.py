@@ -1,5 +1,5 @@
 def shrinkPaddle(paddleSize):
-    if(paddleSize > 50):
-        return int(paddleSize * .75)
+    if (paddleSize > 50):
+        return paddleSize * .25
 
-    return paddleSize
+    return 0

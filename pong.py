@@ -77,10 +77,10 @@ def ballMovement():
     if ball.colliderect(box.getBox()):
         sounds.playAlienSound()
         box.removeBox()
-        if(ballSpeedX < 0):
-            opponent.inflate_ip(paddleShrink.shrinkPaddle(opponent.height))
+        if (ballSpeedX < 0):
+            opponent.inflate_ip(0, -paddleShrink.shrinkPaddle(opponent.height))
         else:
-            player.inflate_ip(paddleShrink.shrinkPaddle(player.height))
+            player.inflate_ip(0, -paddleShrink.shrinkPaddle(player.height))
 
 
 def ballRestart():
