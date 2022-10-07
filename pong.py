@@ -4,6 +4,7 @@ import random
 import Components.score as score
 import Components.sounds as sounds
 import Components.itemBox as box
+import Mods.paddleShrink as paddleShrink
 
 # General setup
 pygame.init()
@@ -76,6 +77,10 @@ def ballMovement():
     if ball.colliderect(box.getBox()):
         sounds.playAlienSound()
         box.removeBox()
+        if(ballSpeedX < 0):
+            opponent.inflate_ip(paddleShrink.shrinkPaddle(opponent.height))
+        else:
+            player.inflate_ip(paddleShrink.shrinkPaddle(player.height))
 
 
 def ballRestart():
