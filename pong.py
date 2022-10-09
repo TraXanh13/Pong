@@ -4,12 +4,14 @@ import random
 import Components.score as score
 import Components.sounds as sounds
 import Components.itemBox as box
+from Components.player import Player
 import Mods.paddleShrink as paddleShrink
 
 # General setup
 pygame.init()
 clock = pygame.time.Clock()
 pygame.font.init()
+
 
 # Global variables
 ballSpeedX = 7
@@ -27,9 +29,10 @@ screenHeight = 700
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption('Pong')
 
+p = Player(screenWidth, screenHeight)
+
 # Game Rectangles
 ball = pygame.Rect(screenWidth/2-15, screenHeight/2-15, 30, 30)
-player = pygame.Rect(screenWidth-20, screenHeight/2-70, 10, 140)
 opponent = pygame.Rect(10, screenHeight/2-70, 10, 140)
 
 
@@ -55,12 +58,12 @@ def ballMovement():
         score.increase_opponent_score()
 
     # Bounce off player
-    if (ball.colliderect(player)):
+    if (ball.colliderect(p.getPlayer())):
         sounds.playPongSound()
         ballSpeedX *= -1
-        if (ball.y > player.centery + 20):
+        if (ball.y > p.getPlayer().centery + 20):
             ballSpeedY = abs(ballSpeedY)
-        elif (ball.y < player.centery - 20):
+        elif (ball.y < p.getPlayer().centery - 20):
             ballSpeedY = -abs(ballSpeedY)
 
     # Bounce off opponent
@@ -73,14 +76,14 @@ def ballMovement():
             ballSpeedY = -abs(ballSpeedY)
 
     # Collision with item box
-    # TODO: Add modes for the item box
-    if ball.colliderect(box.getBox()):
-        sounds.playAlienSound()
-        box.removeBox()
-        if (ballSpeedX < 0):
-            opponent.inflate_ip(0, -paddleShrink.shrinkPaddle(opponent.height))
-        else:
-            player.inflate_ip(0, -paddleShrink.shrinkPaddle(player.height))
+    # TODO: Uncomment this and put in the mod file
+    # if ball.colliderect(box.getBox()):
+    #     sounds.playAlienSound()
+    #     box.removeBox()
+    #     if (ballSpeedX < 0):
+    #         opponent.inflate_ip(0, -paddleShrink.shrinkPaddle(opponent.height))
+    #     else:
+    #         player.inflate_ip(0, -paddleShrink.shrinkPaddle(player.height))
 
 
 def ballRestart():
@@ -92,17 +95,12 @@ def ballRestart():
 
 
 def playerMovement():
-    global playerSpeed
     # Controlled with the up and down arrow keys
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_DOWN:
-            player.y += playerSpeed
-            if (player.bottom >= screenHeight):
-                player.bottom = screenHeight
+            p.moveDown(screenHeight)
         if event.key == pygame.K_UP:
-            player.y -= playerSpeed
-            if (player.top <= 0):
-                player.top = 0
+            p.moveUp()
     return
 
 # Opponent follows the ball on the y axis
@@ -136,7 +134,7 @@ if __name__ == "__main__":
                            (screenWidth/2, screenHeight))
         pygame.draw.rect(screen, lightGrey,
                          box.spawnBox(pygame.time.get_ticks()))
-        pygame.draw.rect(screen, lightGrey, player)
+        p.drawPlayer(screen)
         pygame.draw.rect(screen, lightGrey, opponent)
 
         # Update scores
