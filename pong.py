@@ -50,11 +50,13 @@ def ballMovement():
     if (ball.left <= 0):
         sounds.playScoreSound()
         ballRestart()
+        p.resetHeight()
         score.increase_player_score()
 
     if (ball.right >= screenWidth):
         sounds.playScoreSound()
         ballRestart()
+        p.resetHeight()
         score.increase_opponent_score()
 
     # Bounce off player
@@ -77,13 +79,13 @@ def ballMovement():
 
     # Collision with item box
     # TODO: Uncomment this and put in the mod file
-    # if ball.colliderect(box.getBox()):
-    #     sounds.playAlienSound()
-    #     box.removeBox()
-    #     if (ballSpeedX < 0):
-    #         opponent.inflate_ip(0, -paddleShrink.shrinkPaddle(opponent.height))
-    #     else:
-    #         player.inflate_ip(0, -paddleShrink.shrinkPaddle(player.height))
+    if ball.colliderect(box.getBox()):
+        sounds.playAlienSound()
+        box.removeBox()
+        if (ballSpeedX < 0):
+            opponent.inflate_ip(0, -paddleShrink.shrinkPaddle(opponent.height))
+        else:
+            p.changeHeight(-paddleShrink.shrinkPaddle(p.getPlayer().height))
 
 
 def ballRestart():

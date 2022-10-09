@@ -5,7 +5,8 @@ class Player:
     def __init__(self, screenWidth, screenHeight):
         self.playerSpeed = 10
         self.defaultSpeed = 10
-        self.player = pygame.Rect(screenWidth-20, screenHeight/2-70, 10, 140)
+        self.player = pygame.Rect(
+            screenWidth-20, screenHeight/2-70, 10, 140)
 
     def getPlayer(self):
         return self.player
@@ -17,8 +18,13 @@ class Player:
         self.playerSpeed = self.defaultSpeed
 
     def changeSpeed(self, speed):
-        global playerSpeed
-        playerSpeed = speed
+        self.playerSpeed = speed
+
+    def resetHeight(self):
+        self.player.inflate_ip(0, 140-self.player.height)
+
+    def changeHeight(self, height):
+        self.player.inflate_ip(0, height)
 
     def moveUp(self):
         self.player.y -= self.playerSpeed

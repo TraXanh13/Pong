@@ -2,8 +2,8 @@ import pygame
 import random
 
 # Item Box Variables
-box_height = 30
-box_width = 30
+box_height = 300
+box_width = 300
 box_x = 1500
 box_y = 0
 

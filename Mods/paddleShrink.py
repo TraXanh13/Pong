@@ -1,4 +1,4 @@
-def shrinkPaddle(character, paddleSize):
+def shrinkPaddle(paddleSize):
     if (paddleSize > 50):
         return paddleSize * .25
 
