@@ -5,6 +5,7 @@ import Components.score as score
 import Components.sounds as sounds
 import Components.itemBox as box
 from Components.player import Player
+from Components.opponent import Opponent
 import Mods.paddleShrink as paddleShrink
 
 # General setup
@@ -29,11 +30,12 @@ screenHeight = 700
 screen = pygame.display.set_mode((screenWidth, screenHeight))
 pygame.display.set_caption('Pong')
 
-p = Player(screenWidth, screenHeight)
+# Initialize classes
+player = Player(screenWidth, screenHeight)
+op = Opponent(screenWidth, screenHeight)
 
 # Game Rectangles
 ball = pygame.Rect(screenWidth/2-15, screenHeight/2-15, 30, 30)
-opponent = pygame.Rect(10, screenHeight/2-70, 10, 140)
 
 
 def ballMovement():
@@ -50,32 +52,32 @@ def ballMovement():
     if (ball.left <= 0):
         sounds.playScoreSound()
         ballRestart()
-        p.resetHeight()
+        player.resetHeight()
         score.increase_player_score()
 
     if (ball.right >= screenWidth):
         sounds.playScoreSound()
         ballRestart()
-        p.resetHeight()
+        player.resetHeight()
         score.increase_opponent_score()
 
     # Bounce off player
-    if (ball.colliderect(p.getPlayer())):
+    if (ball.colliderect(player.getPlayer())):
         sounds.playPongSound()
         ballSpeedX *= -1
-        if (ball.y > p.getPlayer().centery + 20):
+        if (ball.y > player.getPlayer().centery + 20):
             ballSpeedY = abs(ballSpeedY)
-        elif (ball.y < p.getPlayer().centery - 20):
+        elif (ball.y < player.getPlayer().centery - 20):
             ballSpeedY = -abs(ballSpeedY)
 
     # Bounce off opponent
-    if (ball.colliderect(opponent)):
+    if (ball.colliderect(op.getOpponent())):
         sounds.playPongSound()
         ballSpeedX *= -1
-        if (ball.y > opponent.centery + 20):
-            ballSpeedY = abs(ballSpeedY)
-        elif (ball.y < opponent.centery - 20):
-            ballSpeedY = -abs(ballSpeedY)
+        # if (ball.y > opponent.centery + 20):
+        #     ballSpeedY = abs(ballSpeedY)
+        # elif (ball.y < opponent.centery - 20):
+        #     ballSpeedY = -abs(ballSpeedY)
 
     # Collision with item box
     # TODO: Uncomment this and put in the mod file
@@ -83,9 +85,9 @@ def ballMovement():
         sounds.playAlienSound()
         box.removeBox()
         if (ballSpeedX < 0):
-            opponent.inflate_ip(0, -paddleShrink.shrinkPaddle(opponent.height))
+            op.changeHeight(-paddleShrink.shrinkPaddle(op.getOpponent().height))
         else:
-            p.changeHeight(-paddleShrink.shrinkPaddle(p.getPlayer().height))
+            player.changeHeight(-paddleShrink.shrinkPaddle(player.getPlayer().height))
 
 
 def ballRestart():
@@ -100,25 +102,10 @@ def playerMovement():
     # Controlled with the up and down arrow keys
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_DOWN:
-            p.moveDown(screenHeight)
+            player.moveDown(screenHeight)
         if event.key == pygame.K_UP:
-            p.moveUp()
+            player.moveUp()
     return
-
-# Opponent follows the ball on the y axis
-
-
-def opponentMovement():
-    global playerSpeed
-    if ball.y > opponent.y:
-        opponent.y += opponentSpeed
-        if (opponent.bottom >= screenHeight):
-            opponent.bottom = screenHeight
-    if ball.y < opponent.y:
-        opponent.y -= opponentSpeed
-        if (opponent.top <= 0):
-            opponent.top = 0
-
 
 if __name__ == "__main__":
 
@@ -136,8 +123,8 @@ if __name__ == "__main__":
                            (screenWidth/2, screenHeight))
         pygame.draw.rect(screen, lightGrey,
                          box.spawnBox(pygame.time.get_ticks()))
-        p.drawPlayer(screen)
-        pygame.draw.rect(screen, lightGrey, opponent)
+        player.drawPlayer(screen)
+        op.drawOpponent(screen)
 
         # Update scores
         score.draw_scores(screen, screenWidth, screenHeight)
@@ -145,7 +132,7 @@ if __name__ == "__main__":
         # Move objects
         ballMovement()
         playerMovement()
-        opponentMovement()
+        op.moveOpponent(ball, screenHeight)
 
         # updating the window
         pygame.display.flip()
