@@ -1,37 +1,21 @@
 import pygame
+import Components.character as character
 
 
-class Player:
-    def __init__(self, screenWidth, screenHeight):
-        self.playerSpeed = 10
+class Player(character.Character):
+    def __init__(self, screen):
+        self.speed = 10
         self.defaultSpeed = 10
-        self.player = pygame.Rect(
-            screenWidth-20, screenHeight/2-70, 10, 140)
-
-    def getPlayer(self):
-        return self.player
-
-    def drawPlayer(self, screen):
-        pygame.draw.rect(screen, (200, 200, 200), self.player)
-
-    def resetSpeed(self):
-        self.playerSpeed = self.defaultSpeed
-
-    def changeSpeed(self, speed):
-        self.playerSpeed = speed
-
-    def resetHeight(self):
-        self.player.inflate_ip(0, 140-self.player.height)
-
-    def changeHeight(self, height):
-        self.player.inflate_ip(0, height)
+        self.character = pygame.Rect(
+            screen.get_width()-20, screen.get_height()/2-70, 10, 140)
+        self.screen = screen
 
     def moveUp(self):
-        self.player.y -= self.playerSpeed
-        if (self.player.top <= 0):
-            self.player.y = 0
+        self.character.y -= self.speed
+        if (self.character.top <= 0):
+            self.character.y = 0
 
-    def moveDown(self, screenheight):
-        self.player.y += self.playerSpeed
-        if (self.player.bottom > screenheight):
-            self.player.bottom = screenheight
+    def moveDown(self):
+        self.character.y += self.speed
+        if (self.character.bottom > self.screen.get_height()):
+            self.character.bottom = self.screen.get_height()
