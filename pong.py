@@ -4,7 +4,6 @@ import Components.score as score
 from Components.player import Player
 from Components.opponent import Opponent
 from Components.gameBall import GameBall
-import Components.itemBox as box
 
 # General setup
 pygame.init()
@@ -38,7 +37,6 @@ def playerMovement():
 
 
 if __name__ == "__main__":
-
     # Game loop
     while True:
         # Handle input
@@ -60,7 +58,7 @@ if __name__ == "__main__":
 
         # Move objects
         playerMovement()
-        ball.moveBall()
+        ball.moveBall(player, op, score)
         op.moveOpponent(ball.getBall())
 
         # updating the window

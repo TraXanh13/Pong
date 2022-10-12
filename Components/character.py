@@ -16,11 +16,17 @@ class Character:
         self.character.inflate_ip(0, 140-self.character.height)
 
     def resetCharacter(self):
-        self.character.inflate_ip(0, 140-self.character.height)
-        self.speed = self.defaultSpeed
+        self.resetSpeed()
+        self.resetHeight()
 
     def changeSpeed(self, speed):
         self.speed = speed
+
+    def getHeight(self):
+        return self.character.height
+
+    def getSpeed(self):
+        return self.speed
 
     def changeHeight(self, height):
         self.character.inflate_ip(0, height)
