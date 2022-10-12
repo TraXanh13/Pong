@@ -6,8 +6,12 @@ class Ball:
     def getBall(self):
         return self.ball
 
+    def changeBallSpeed(self, speed):
+        self.ballSpeedX = speed + random.randint(-3, 10)
+        self.ballSpeedY = speed + random.randint(-3, 10)
+
     def drawBall(self):
-        pygame.draw.ellipse(self.screen, (200, 200, 200), self.ball)
+        pygame.draw.ellipse(self.screen, self.color, self.ball)
 
     def moveBall(self):
         self.ball.x += self.ballSpeedX

@@ -1,8 +1,10 @@
 import pygame
-import Components.ball as ball
 import random
+import mods
+import Components.ball as ball
 import Components.sounds as sounds
 
+modList = [mods.inverseControls, mods.shrinkPaddle, mods.growPaddle, mods.slowMotion, mods.speedUp]
 
 class GameBall(ball.Ball):
     def __init__(self, screen):
@@ -12,6 +14,7 @@ class GameBall(ball.Ball):
         self.ballSpeedY = 7
         self.maxX = screen.get_width()
         self.maxY = screen.get_height()
+        self.color = (200, 200, 200)
         self.screen = screen
 
     def getBallDirection(self):
@@ -25,12 +28,8 @@ class GameBall(ball.Ball):
         self.ballSpeedX *= random.choice((1, -1))
         self.ballSpeedY *= random.choice((1, -1))
 
-    def changeBallSpeed(self, speed):
-        self.ballSpeedX = speed + random.randint(-3, 10)
-        self.ballSpeedY = speed + random.randint(-3, 10)
-
     # Overrides the parent ball method
-    def moveBall(self, player, opponent, score):
+    def moveBall(self, player, opponent, itemBox, score):
         self.ball.x += self.ballSpeedX
         self.ball.y += self.ballSpeedY
 
@@ -71,3 +70,6 @@ class GameBall(ball.Ball):
                 self.ballSpeedY = abs(self.ballSpeedY)
             elif (self.ball.y < opponent.getCharacter().centery - 20):
                 self.ballSpeedY = -abs(self.ballSpeedY)
+        
+        if(self.ball.colliderect(itemBox.getBox())):
+            modList[random.randint(0, len(modList)-1)](player, opponent, self)

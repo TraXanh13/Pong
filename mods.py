@@ -1,5 +1,8 @@
 import pygame
 
+def inverseControls(player, *_):
+    player.changeSpeed(-player.speed)
+
 
 def shrinkPaddle(player, op, ball):
     if (ball.getBallDirection() and player.getHeight() > 50):
@@ -13,10 +16,6 @@ def growPaddle(player, op, ball):
         player.changeHeight(player.getHeight() * 1.25)
     elif (ball.getBallDirection() and op.getHeight() < 300):
         op.changeHeight(player.getHeight() * 1.25)
-
-
-def inverseControls(player, **kwargs):
-    player.changeSpeed(-player.speed)
 
 
 def slowMotion(player, op, ball):

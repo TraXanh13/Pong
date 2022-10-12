@@ -1,6 +1,7 @@
 import pygame
 import sys
 import Components.score as score
+import Components.itemBox as itemBox
 from Components.player import Player
 from Components.opponent import Opponent
 from Components.gameBall import GameBall
@@ -52,13 +53,14 @@ if __name__ == "__main__":
         player.drawCharacter()
         op.drawCharacter()
         ball.drawBall()
+        pygame.draw.rect(screen, (255, 255, 255), itemBox.spawnBox(pygame.time.get_ticks()))
 
         # Update scores
         score.draw_scores(screen, screenWidth, screenHeight)
 
         # Move objects
         playerMovement()
-        ball.moveBall(player, op, score)
+        ball.moveBall(player, op, itemBox, score)
         op.moveOpponent(ball.getBall())
 
         # updating the window
