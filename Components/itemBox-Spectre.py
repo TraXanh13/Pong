@@ -10,7 +10,7 @@ box_y = 0
 
 def spawnBox(clock):
     global box_x, box_y
-    if clock % 4000 <= 17:
+    if (clock % 4000 <= 17):
         box_x = random.randint(50, 1150)
         box_y = random.randint(0, 670)
     return pygame.Rect(box_x, box_y, box_height, box_width)
